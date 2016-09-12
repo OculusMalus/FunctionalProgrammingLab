@@ -5,37 +5,36 @@ using System.Text;
 
 namespace Operators
 {
-    class LINQQueryExpressions
+    class Scores
     {
         static void Main()
-        {  
-            string s = "90, 100, 82, 89, 55, 75, 88, 49, 32";
+        {
+            string s = "90, 100, 82, 89, 55, 75, 88, 49, 32, 22,36,33";
 
             string[] words = s.Split(',');
 
-            int length = words.Length;
+            int[] scoreArray = words.Select(int.Parse).ToArray();
 
-            int[] scores = new int[words.Length];
-
-            for (int i=0; i< words.Length; i++)
-            {
-                int number = Int32.Parse(words[i]);
-                scores[i] = number;
-            }
-            
-            // Define the query expression.
+            List<int> scores = scoreArray.ToList();
+          
             IEnumerable<int> scoreQuery = from score in scores
-                                          orderby score 
-                                          //where score > 50
+                                          orderby score
                                           select score;
+           
+            Console.Write("Here is your full list of scores:\n");
 
-            // Execute the query.
-            Console.Write("Here is a full list of scores:\n");
-            foreach (int i in scoreQuery)
-            {
-                Console.Write(i + " ");
-            }
+            scoreQuery.ToList().ForEach(i => Console.Write(i+" "));
+           
+            var scoresToGrade = scoreQuery.Skip(3);
 
+            Console.Write("\n\nLet's drop the lowest three grades and calculate your average!\n\n");
+            Console.WriteLine("Here is your new list of grades:");
+
+            scoresToGrade.ToList().ForEach(i => Console.Write(i + " "));
+
+            double average1 = scoresToGrade.Average();
+
+            Console.WriteLine("\n\nYour average is: {0}", Math.Round(average1,2));
             Console.ReadLine();
         }
     }
